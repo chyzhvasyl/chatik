@@ -11,7 +11,8 @@ module.exports = io =>{
       io.emit('disconnect', allConnected);
       console.log('User connected', socket.id);
     });
-    socket.join('all');
+    //socket.join('all');
+    socket.on('getSocketIdUser', socketId => {
     socket.on('msg', content => {
 
       let message = {
@@ -26,8 +27,18 @@ module.exports = io =>{
         }
         else {
           console.log("Message Received: " + content);
-          socket.emit('message', message);
-          socket.to('all').emit('message', message)
+
+
+          io.to(socketId).emit('send_message_to_user', message);
+          //socket.emit('message', message);
+          //socket.to('all').emit('message', message)
+
+
+
+
+
+
+
           //socket.on('message', (message) => {
           //  console.log("Message Received: " + message);
           //  io.emit('message', {type:'new-message', text: message});
@@ -35,7 +46,9 @@ module.exports = io =>{
         }
       });
       //io.emit('message', {type:'new-message', text: message});
-    });
+    })   });
+
+
     socket.on('receive_history', () => {
       message_scheme
         .find({})

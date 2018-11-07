@@ -1,5 +1,4 @@
 import {Component, OnInit  } from '@angular/core';
-
 import {Message} from '../../classes/message';
 import {WebsocketService} from '../../services/websocket.service';
 import {ChatService} from '../../services/chat.service';
@@ -35,12 +34,13 @@ export class ChatBodyComponent implements OnInit {
   sendMessage()
   {
     this.chatservice.sendmessage(this.message.content);
+
     this.chat_autoscroll();
 
   }
   openChat(socketId ){
-    console.log('socketId', socketId)
-
+    //this.message_array = [];
+    this.websocketservice.sendSocketIdUser(socketId) ;
   }
 
  public ngOnInit(): void {
@@ -49,10 +49,16 @@ export class ChatBodyComponent implements OnInit {
      this.online_users = socket;
      //console.log('online_users', socket);
    });
-    this.websocketservice.getMessages().subscribe(message => {
-      this.message_array = message;
-      this.message_array.reverse();
-    });
+ //  this.websocketservice.getMessage//FromUser().subscribe(message => {
+ //    this.message_array = message;
+ //    console.log('message', message);
+ //    this.message_array.reverse();
+ //  });
+
+   // this.websocketservice.getMessages().subscribe(message => {//
+   //   this.message_array = message;
+   //   this.message_array.reverse();
+   // });
 
     this.chatservice.messages.subscribe(msg => {
       this.message.date = msg.date;

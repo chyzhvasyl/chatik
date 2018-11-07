@@ -10,20 +10,16 @@ import {environment} from '../../environments/environment';
 export class WebsocketService {
   private socket;
   online_users = [];
+  socket_user_id: string;
   constructor() {
   }
   connect(): Rx.Subject<MessageEvent> {
     this.socket = io(environment.ws_url);
     const observable = new Observable(observer => {
-      this.socket.on('message', (data) => {
-       // console.log('Received message from Websocket Server', 'connected!');
-        this.socket.emit('receive_history');
+      this.socket.on('send_message_to_user', (data) => {
+       // this.socket.emit('receive_history');
         observer.next(data);
       });
-      // this.socket.on('history', messages => {
-      //  console.log('history', messages);
-//
-      // });
       return () => {
         this.socket.disconnect();
       };
@@ -33,7 +29,7 @@ export class WebsocketService {
         this.socket.emit('msg', data);
 
 
-        console.log(data);
+        console.log('msg', data);
       },
     };
     const message_history = {
@@ -56,6 +52,37 @@ export class WebsocketService {
       };
     });
   }
+
+  getMessageFromUser(){
+    let observable = new Observable(observer => {
+      this.socket.on('send_message_to_user', (data) => {
+        observer.next(data);
+      });
+      return () => {
+        this.socket.disconnect();
+      };
+    });
+    return observable;
+  }
+
+
+  sendSocketIdUser(socketId) {
+    this.socket.emit('getSocketIdUser', socketId);
+
+
+
+  //return new Observable(observer => {
+    //  this.socket_user_id = socketId;
+    //  this.socket.emit('getSocketIdUser', socketId => {
+    //    console.log('getSocketIdUser', socketId);
+    //    socketId = this.socket_user_id;
+//
+    //   observer.next(socketId);
+    //  });
+    //});
+  }
+
+
   getSocket() {
     return new Observable(observer => {
       //this.socket.on('online', (online_users) => {
@@ -65,19 +92,14 @@ export class WebsocketService {
       this.socket.on('online', (numberOfOnlineUsers) => {
         this.online_users = numberOfOnlineUsers;
         //this.online_users.push(numberOfOnlineUsers);
-        //console.log('number 0f online', numberOfOnlineUsers);
         observer.next(numberOfOnlineUsers);
       });
       this.socket.on('disconnect', (numberOfOnlineUsers) => {
         this.online_users = numberOfOnlineUsers;
-
         // this.offline_users.push(numberOfOnlineUsers);
         // this.online_users =  _.difference(this.online_users, this.offline_users);
         observer.next(numberOfOnlineUsers);
-        //console.log('number 0f disconnect', numberOfOnlineUsers);
       });
-
-
       return () => {
         this.socket.disconnect();
       };
@@ -86,15 +108,11 @@ export class WebsocketService {
   getOnline(){
     this.socket.on('online', (numberOfOnlineUsers) => {
       this.online_users = numberOfOnlineUsers;
-      //this.online_users.push(numberOfOnlineUsers);
-      //console.log('number 0f online', numberOfOnlineUsers);
     });
     this.socket.on('disconnect', (numberOfOnlineUsers) => {
       this.online_users = numberOfOnlineUsers;
-
       // this.offline_users.push(numberOfOnlineUsers);
       // this.online_users =  _.difference(this.online_users, this.offline_users);
-     // console.log('number 0f disconnect', numberOfOnlineUsers);
     });
 
   }
