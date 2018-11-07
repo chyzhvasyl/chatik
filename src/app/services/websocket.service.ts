@@ -16,7 +16,7 @@ export class WebsocketService {
     this.socket = io(environment.ws_url);
     const observable = new Observable(observer => {
       this.socket.on('message', (data) => {
-        console.log('Received message from Websocket Server', 'connected!');
+       // console.log('Received message from Websocket Server', 'connected!');
         this.socket.emit('receive_history');
         observer.next(data);
       });
@@ -65,7 +65,7 @@ export class WebsocketService {
       this.socket.on('online', (numberOfOnlineUsers) => {
         this.online_users = numberOfOnlineUsers;
         //this.online_users.push(numberOfOnlineUsers);
-        console.log('number 0f online', numberOfOnlineUsers);
+        //console.log('number 0f online', numberOfOnlineUsers);
         observer.next(numberOfOnlineUsers);
       });
       this.socket.on('disconnect', (numberOfOnlineUsers) => {
@@ -74,7 +74,7 @@ export class WebsocketService {
         // this.offline_users.push(numberOfOnlineUsers);
         // this.online_users =  _.difference(this.online_users, this.offline_users);
         observer.next(numberOfOnlineUsers);
-        console.log('number 0f disconnect', numberOfOnlineUsers);
+        //console.log('number 0f disconnect', numberOfOnlineUsers);
       });
 
 
@@ -87,14 +87,14 @@ export class WebsocketService {
     this.socket.on('online', (numberOfOnlineUsers) => {
       this.online_users = numberOfOnlineUsers;
       //this.online_users.push(numberOfOnlineUsers);
-      console.log('number 0f online', numberOfOnlineUsers);
+      //console.log('number 0f online', numberOfOnlineUsers);
     });
     this.socket.on('disconnect', (numberOfOnlineUsers) => {
       this.online_users = numberOfOnlineUsers;
 
       // this.offline_users.push(numberOfOnlineUsers);
       // this.online_users =  _.difference(this.online_users, this.offline_users);
-      console.log('number 0f disconnect', numberOfOnlineUsers);
+     // console.log('number 0f disconnect', numberOfOnlineUsers);
     });
 
   }

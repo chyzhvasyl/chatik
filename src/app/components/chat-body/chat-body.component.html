@@ -145,9 +145,9 @@
 
 
 <div class="back_panel_online">
-          <div *ngFor="let online of online_users  | filterUser : query" class="list-group">
+          <div   *ngFor="let online of online_users  | filterUser : query" class="list-group">
 
-            <a style="" href="#" class="list-group-item list-group-item-action listhover flex-column align-items-start">
+            <a (click)="openChat(online)" style="" href="#" class="list-group-item list-group-item-action listhover flex-column align-items-start">
               <div class="d-flex w-100 justify-content-between">
                 <p class="mb-1">  {{online.substr(0,8) + '...'}} </p><br>
 

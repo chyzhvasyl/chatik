@@ -38,11 +38,16 @@ export class ChatBodyComponent implements OnInit {
     this.chat_autoscroll();
 
   }
+  openChat(socketId ){
+    console.log('socketId', socketId)
+
+  }
+
  public ngOnInit(): void {
 
    this.websocketservice.getSocket().subscribe(socket => {
      this.online_users = socket;
-     console.log('online_users', socket);
+     //console.log('online_users', socket);
    });
     this.websocketservice.getMessages().subscribe(message => {
       this.message_array = message;
